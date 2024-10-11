@@ -3,8 +3,11 @@
 class Produk {
 	public $judul,
 		$penulis,
-		$penerbit,
-		$harga;
+		$penerbit;
+
+	protected $diskon;
+
+	private $harga;
 
 	public function __construct( $judul = "judul", $penulis = "penulis",
 		$penerbit = "penerbit", $harga = 0) {
@@ -14,20 +17,16 @@ class Produk {
 		$this->harga = $harga;
 	}
 
-	public function getLabel() {
-		return "$this->penulis, $this->penerbit";
+	public function setDiskon( $diskon ) {
+		$this->diskon = $diskon;
 	}
 
-	public function getInfoLengkap() {
-		$str = "{$this->tipe} : {$this->judul} | {$this->getLabel()} (Rp. {$this->harga})";
+	public function getHarga() {
+		return $this->harga - ($this->harga*$this->diskon/100);
+	}
 
-		if ($this->tipe == "Komik" ) {
-			$str .= " ~ {$this->jmlHal} Halaman.";
-		} else if ($this->tipe == "Game") {
-			$str .= " ~ {$this->wktMain} Jam.";
-		}
-
-		return $str;
+	public function getLabel() {
+		return "$this->penulis, $this->penerbit";
 	}
 
 	public function getInfoProduk() {
@@ -47,7 +46,7 @@ class Komik extends Produk {
 	}
 
 	public function getInfoProduk() {
-		$str = "Komik : {$this->judul} | {$this->getLabel()} (Rp. {$this->harga}) ~ {$this->jmlHal} Halaman.";
+		$str = "Komik : " . parent::getInfoProduk() . " ~ {$this->jmlHal} Halaman.";
 		return $str;
 	}
 }
@@ -61,16 +60,20 @@ class Game extends Produk {
 
 		$this->wktMain = $wktMain;
 	}
+	
+	public function setDiskon( $diskon ) {
+		$this->diskon = $diskon;
+	}
 
 	public function getInfoProduk() {
-		$str = "Game : {$this->judul} | {$this->getLabel()} (Rp. {$this->harga}) ~ {$this->wktMain} Jam.";
+		$str = "Game : " . parent::getInfoProduk() . " ~ {$this->wktMain} Jam.";
 		return $str;
 	}
 }
 
 class CetakInfoProduk {
 	public function cetak(Produk $produk) {
-		$str = "{$produk->judul} | {$produk->getLabel()} (Rp. {$produk->harga})";
+		$str = "{$produk->judul} | {$produk->getLabel()} (Rp. {$produk->getHarga()})";
 
 		return $str;
 	}
@@ -83,4 +86,7 @@ echo $produk1->getInfoProduk();
 echo "<br>";
 echo $produk2->getInfoProduk();
 echo "<br>";
+
+$produk2->setDiskon(50);
+echo $produk2->getHarga();
 ?>
