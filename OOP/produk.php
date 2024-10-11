@@ -4,20 +4,14 @@ class Produk {
 	public $judul,
 		$penulis,
 		$penerbit,
-		$harga,
-		$jmlHal,
-		$wktMain,
-		$type;
+		$harga;
 
 	public function __construct( $judul = "judul", $penulis = "penulis",
-		$penerbit = "penerbit", $harga = 0, $jmlHal = 0, $wktMain = 0, $tipe) {
+		$penerbit = "penerbit", $harga = 0) {
 		$this->judul = $judul;
 		$this->penulis = $penulis;
 		$this->penerbit = $penerbit;
 		$this->harga = $harga;
-		$this->jmlHal = $jmlHal;
-		$this->wktMain = $wktMain;
-		$this->tipe = $tipe;
 	}
 
 	public function getLabel() {
@@ -43,6 +37,15 @@ class Produk {
 }
 
 class Komik extends Produk {
+	public $jmlHal;
+
+	public function __construct( $judul = "judul", $penulis = "penulis",
+		$penerbit = "penerbit", $harga = 0, $jmlHal = 0) {
+		parent::__construct( $judul, $penulis, $penerbit, $harga);
+
+		$this->jmlHal = $jmlHal;
+	}
+
 	public function getInfoProduk() {
 		$str = "Komik : {$this->judul} | {$this->getLabel()} (Rp. {$this->harga}) ~ {$this->jmlHal} Halaman.";
 		return $str;
@@ -50,6 +53,15 @@ class Komik extends Produk {
 }
 	
 class Game extends Produk {
+	public $wktMain;
+
+	public function __construct( $judul = "judul", $penulis = "penulis",
+		$penerbit = "penerbit", $harga = 0, $wktMain = 0) {
+		parent::__construct( $judul, $penulis, $penerbit, $harga);
+
+		$this->wktMain = $wktMain;
+	}
+
 	public function getInfoProduk() {
 		$str = "Game : {$this->judul} | {$this->getLabel()} (Rp. {$this->harga}) ~ {$this->wktMain} Jam.";
 		return $str;
@@ -64,8 +76,8 @@ class CetakInfoProduk {
 	}
 }
 
-$produk1 = new Komik("Naruto", "Masashi Kishimoto", "Shonen Jump", 30000, 100, 0, "Komik");
-$produk2 = new Game("Uncharted", "Neil Druckmann", "Sony Computer", 250000, 0, 50, "Game");
+$produk1 = new Komik("Naruto", "Masashi Kishimoto", "Shonen Jump", 30000, 100, "Komik");
+$produk2 = new Game("Uncharted", "Neil Druckmann", "Sony Computer", 250000, 50, "Game");
 
 echo $produk1->getInfoProduk();
 echo "<br>";
