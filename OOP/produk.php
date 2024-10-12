@@ -3,6 +3,7 @@
 interface InfoProduk {
 	public function getInfoProduk();
 }
+
 abstract class Produk {
 	protected $judul,
 		$penulis,
