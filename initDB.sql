@@ -5,7 +5,9 @@
  */
 
 -- Assume that database named 'prakweb_2024_C_223040093' was created;
-drop table prakweb_2024_C_223040093.Buku;
+use prakweb_2024_C_223040093;
+
+drop table if exists prakweb_2024_C_223040093.Buku;
 create table if not exists prakweb_2024_C_223040093.Buku (
     ID_Buku char(2),
     Judul_Buku varchar(80),
