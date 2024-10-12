@@ -1,6 +1,6 @@
 <?php
 
-class Produk {
+abstract class Produk {
 	private $judul,
 		$penulis,
 		$penerbit,
@@ -60,7 +60,9 @@ class Produk {
 		return "$this->penulis, $this->penerbit";
 	}
 
-	public function getInfoProduk() {
+	abstract public function getInfoProduk();
+	
+	public function getInfo() {
 		$str = "{$this->judul} | {$this->getLabel()} (Rp. {$this->harga})";
 		return $str;
 	}
@@ -77,7 +79,7 @@ class Komik extends Produk {
 	}
 
 	public function getInfoProduk() {
-		$str = "Komik : " . parent::getInfoProduk() . " ~ {$this->jmlHal} Halaman.";
+		$str = "Komik : " . $this->getInfo() . " ~ {$this->jmlHal} Halaman.";
 		return $str;
 	}
 }
@@ -97,14 +99,24 @@ class Game extends Produk {
 	}
 
 	public function getInfoProduk() {
-		$str = "Game : " . parent::getInfoProduk() . " ~ {$this->wktMain} Jam.";
+		$str = "Game : " . $this->getInfo() . " ~ {$this->wktMain} Jam.";
 		return $str;
 	}
 }
 
 class CetakInfoProduk {
-	public function cetak(Produk $produk) {
-		$str = "{$produk->judul} | {$produk->getLabel()} (Rp. {$produk->getHarga()})";
+	public $daftarProduk = array();
+
+	public function tambahProduk($produk) {
+		$this->daftarProduk[] = $produk;
+	}
+
+	public function cetak() {
+		$str = "DAFTAR PRODUK : <br>";
+
+		foreach ($this->daftarProduk as $produk) {
+			$str .= "~ {$produk->getInfoProduk()} <br>";
+		}
 
 		return $str;
 	}
@@ -113,16 +125,8 @@ class CetakInfoProduk {
 $produk1 = new Komik("Naruto", "Masashi Kishimoto", "Shonen Jump", 30000, 100, "Komik");
 $produk2 = new Game("Uncharted", "Neil Druckmann", "Sony Computer", 250000, 50, "Game");
 
-echo $produk1->getInfoProduk();
-echo "<br>";
-echo $produk2->getInfoProduk();
-echo "<br>";
-
-$produk2->setDiskon(50);
-echo $produk2->getHarga();
-echo "<br>";
-
-$produk1->setPenulis("Sandhika Galih");
-echo $produk1->getPenulis();
-echo "<br>";
+$cetakProduk = new CetakInfoProduk();
+$cetakProduk->tambahProduk($produk1);
+$cetakProduk->tambahProduk($produk2);
+echo $cetakProduk->cetak();
 ?>
